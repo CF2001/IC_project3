@@ -12,10 +12,9 @@ SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BASE_DIR}/../tests-bin)
 
 ## Exercise 1
 add_executable( testFCM testFCM.cpp )
-target_link_libraries( testFCM )
-
 
 ## Exercise 2
-#add_executable( ex2 ex2.cpp )
-#target_link_libraries( ex2 ${OpenCV_LIBS} )
+add_executable( lang lang.cpp )
 
+## Exercise 3
+add_executable( findLang findLang.cpp )

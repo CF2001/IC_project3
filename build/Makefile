@@ -111,6 +111,32 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named findLang
+
+# Build rule for target.
+findLang: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 findLang
+.PHONY : findLang
+
+# fast build rule for target.
+findLang/fast:
+	$(MAKE) -f CMakeFiles/findLang.dir/build.make CMakeFiles/findLang.dir/build
+.PHONY : findLang/fast
+
+#=============================================================================
+# Target rules for targets named lang
+
+# Build rule for target.
+lang: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 lang
+.PHONY : lang
+
+# fast build rule for target.
+lang/fast:
+	$(MAKE) -f CMakeFiles/lang.dir/build.make CMakeFiles/lang.dir/build
+.PHONY : lang/fast
+
+#=============================================================================
 # Target rules for targets named testFCM
 
 # Build rule for target.
@@ -122,6 +148,60 @@ testFCM: cmake_check_build_system
 testFCM/fast:
 	$(MAKE) -f CMakeFiles/testFCM.dir/build.make CMakeFiles/testFCM.dir/build
 .PHONY : testFCM/fast
+
+findLang.o: findLang.cpp.o
+
+.PHONY : findLang.o
+
+# target to build an object file
+findLang.cpp.o:
+	$(MAKE) -f CMakeFiles/findLang.dir/build.make CMakeFiles/findLang.dir/findLang.cpp.o
+.PHONY : findLang.cpp.o
+
+findLang.i: findLang.cpp.i
+
+.PHONY : findLang.i
+
+# target to preprocess a source file
+findLang.cpp.i:
+	$(MAKE) -f CMakeFiles/findLang.dir/build.make CMakeFiles/findLang.dir/findLang.cpp.i
+.PHONY : findLang.cpp.i
+
+findLang.s: findLang.cpp.s
+
+.PHONY : findLang.s
+
+# target to generate assembly for a file
+findLang.cpp.s:
+	$(MAKE) -f CMakeFiles/findLang.dir/build.make CMakeFiles/findLang.dir/findLang.cpp.s
+.PHONY : findLang.cpp.s
+
+lang.o: lang.cpp.o
+
+.PHONY : lang.o
+
+# target to build an object file
+lang.cpp.o:
+	$(MAKE) -f CMakeFiles/lang.dir/build.make CMakeFiles/lang.dir/lang.cpp.o
+.PHONY : lang.cpp.o
+
+lang.i: lang.cpp.i
+
+.PHONY : lang.i
+
+# target to preprocess a source file
+lang.cpp.i:
+	$(MAKE) -f CMakeFiles/lang.dir/build.make CMakeFiles/lang.dir/lang.cpp.i
+.PHONY : lang.cpp.i
+
+lang.s: lang.cpp.s
+
+.PHONY : lang.s
+
+# target to generate assembly for a file
+lang.cpp.s:
+	$(MAKE) -f CMakeFiles/lang.dir/build.make CMakeFiles/lang.dir/lang.cpp.s
+.PHONY : lang.cpp.s
 
 testFCM.o: testFCM.cpp.o
 
@@ -158,7 +238,15 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... findLang"
+	@echo "... lang"
 	@echo "... testFCM"
+	@echo "... findLang.o"
+	@echo "... findLang.i"
+	@echo "... findLang.s"
+	@echo "... lang.o"
+	@echo "... lang.i"
+	@echo "... lang.s"
 	@echo "... testFCM.o"
 	@echo "... testFCM.i"
 	@echo "... testFCM.s"

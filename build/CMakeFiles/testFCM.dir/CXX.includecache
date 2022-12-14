@@ -35,6 +35,8 @@ map
 -
 vector
 -
+set
+-
 fstream
 -
 ctype.h
@@ -46,6 +48,8 @@ math.h
 
 /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/tests/testFCM.cpp
 iostream
+-
+string
 -
 ../src/Fcm.cpp
 /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/src/Fcm.cpp

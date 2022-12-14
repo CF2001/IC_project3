@@ -2,6 +2,7 @@
 #include <string>
 #include <map>  
 #include <vector>
+#include<set>
 #include <fstream>
 #include <ctype.h>
 #include <algorithm>
@@ -14,6 +15,7 @@ class Fcm {
 	private:
 		int k;
 		double alpha;
+		set <char> alphabet;
 		
 	public: 
 
@@ -35,6 +37,15 @@ class Fcm {
 	*	@param model data structure of the model for determining entropy
 	*/
 	double modelEntropy(map<string,map<char, int>> &model); 
+
+	/**
+	*	@brief	
+	*	@param	
+	*/
+	double nBitsToCompress(string filenameRi, string filenameT);
+
+
+	void saveModelToFile(map<string,map<char, int>> &model, string filename);
 	
 	/**
 	*	@brief	

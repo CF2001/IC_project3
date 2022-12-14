@@ -53,6 +53,8 @@ CMAKE_BINARY_DIR = /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/findLang.dir/all
+all: CMakeFiles/lang.dir/all
 all: CMakeFiles/testFCM.dir/all
 
 .PHONY : all
@@ -63,9 +65,65 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/findLang.dir/clean
+clean: CMakeFiles/lang.dir/clean
 clean: CMakeFiles/testFCM.dir/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/findLang.dir
+
+# All Build rule for target.
+CMakeFiles/findLang.dir/all:
+	$(MAKE) -f CMakeFiles/findLang.dir/build.make CMakeFiles/findLang.dir/depend
+	$(MAKE) -f CMakeFiles/findLang.dir/build.make CMakeFiles/findLang.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles --progress-num=1,2 "Built target findLang"
+.PHONY : CMakeFiles/findLang.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/findLang.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/findLang.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles 0
+.PHONY : CMakeFiles/findLang.dir/rule
+
+# Convenience name for target.
+findLang: CMakeFiles/findLang.dir/rule
+
+.PHONY : findLang
+
+# clean rule for target.
+CMakeFiles/findLang.dir/clean:
+	$(MAKE) -f CMakeFiles/findLang.dir/build.make CMakeFiles/findLang.dir/clean
+.PHONY : CMakeFiles/findLang.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/lang.dir
+
+# All Build rule for target.
+CMakeFiles/lang.dir/all:
+	$(MAKE) -f CMakeFiles/lang.dir/build.make CMakeFiles/lang.dir/depend
+	$(MAKE) -f CMakeFiles/lang.dir/build.make CMakeFiles/lang.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles --progress-num=3,4 "Built target lang"
+.PHONY : CMakeFiles/lang.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/lang.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/lang.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles 0
+.PHONY : CMakeFiles/lang.dir/rule
+
+# Convenience name for target.
+lang: CMakeFiles/lang.dir/rule
+
+.PHONY : lang
+
+# clean rule for target.
+CMakeFiles/lang.dir/clean:
+	$(MAKE) -f CMakeFiles/lang.dir/build.make CMakeFiles/lang.dir/clean
+.PHONY : CMakeFiles/lang.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/testFCM.dir
@@ -74,7 +132,7 @@ clean: CMakeFiles/testFCM.dir/clean
 CMakeFiles/testFCM.dir/all:
 	$(MAKE) -f CMakeFiles/testFCM.dir/build.make CMakeFiles/testFCM.dir/depend
 	$(MAKE) -f CMakeFiles/testFCM.dir/build.make CMakeFiles/testFCM.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles --progress-num=1,2 "Built target testFCM"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles --progress-num=5,6 "Built target testFCM"
 .PHONY : CMakeFiles/testFCM.dir/all
 
 # Build rule for subdir invocation for target.
