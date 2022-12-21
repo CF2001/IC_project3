@@ -18,3 +18,6 @@ add_executable( lang lang.cpp )
 
 ## Exercise 3
 add_executable( findLang findLang.cpp )
+
+## Exercise 4
+add_executable( locateLang locateLang.cpp )

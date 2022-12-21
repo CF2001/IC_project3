@@ -44,13 +44,13 @@ class Fcm {
 	*/
 	double modelEntropy(map<string,map<char, int>> &model); 
 
-	double calculateProbBits(string context, char nextchar, map<string,map<char, int>> modelFCM, int alphabetSIZE);
-
 	/**
 	*	@brief	
 	*	@param	
 	*/
 	double nBitsToCompress(string filenameRi, string filenameT);
+
+	void locateLang(vector<string> totalFilesRi, string filenameT);
 
 
 	void saveModelToFile(map<string,map<char, int>> &model, string filename);

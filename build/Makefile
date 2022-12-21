@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named locateLang
+
+# Build rule for target.
+locateLang: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 locateLang
+.PHONY : locateLang
+
+# fast build rule for target.
+locateLang/fast:
+	$(MAKE) -f CMakeFiles/locateLang.dir/build.make CMakeFiles/locateLang.dir/build
+.PHONY : locateLang/fast
+
+#=============================================================================
 # Target rules for targets named findLang
 
 # Build rule for target.
@@ -203,6 +216,33 @@ lang.cpp.s:
 	$(MAKE) -f CMakeFiles/lang.dir/build.make CMakeFiles/lang.dir/lang.cpp.s
 .PHONY : lang.cpp.s
 
+locateLang.o: locateLang.cpp.o
+
+.PHONY : locateLang.o
+
+# target to build an object file
+locateLang.cpp.o:
+	$(MAKE) -f CMakeFiles/locateLang.dir/build.make CMakeFiles/locateLang.dir/locateLang.cpp.o
+.PHONY : locateLang.cpp.o
+
+locateLang.i: locateLang.cpp.i
+
+.PHONY : locateLang.i
+
+# target to preprocess a source file
+locateLang.cpp.i:
+	$(MAKE) -f CMakeFiles/locateLang.dir/build.make CMakeFiles/locateLang.dir/locateLang.cpp.i
+.PHONY : locateLang.cpp.i
+
+locateLang.s: locateLang.cpp.s
+
+.PHONY : locateLang.s
+
+# target to generate assembly for a file
+locateLang.cpp.s:
+	$(MAKE) -f CMakeFiles/locateLang.dir/build.make CMakeFiles/locateLang.dir/locateLang.cpp.s
+.PHONY : locateLang.cpp.s
+
 testFCM.o: testFCM.cpp.o
 
 .PHONY : testFCM.o
@@ -237,6 +277,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
+	@echo "... locateLang"
 	@echo "... edit_cache"
 	@echo "... findLang"
 	@echo "... lang"
@@ -247,6 +288,9 @@ help:
 	@echo "... lang.o"
 	@echo "... lang.i"
 	@echo "... lang.s"
+	@echo "... locateLang.o"
+	@echo "... locateLang.i"
+	@echo "... locateLang.s"
 	@echo "... testFCM.o"
 	@echo "... testFCM.i"
 	@echo "... testFCM.s"
