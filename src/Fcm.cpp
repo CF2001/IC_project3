@@ -158,69 +158,43 @@ double Fcm::modelEntropy(map<string,map<char, int>> &model)
 	return H;
 } 
 
+double Fcm::calculateProbBits(string context, char nextchar, map<string,map<char, int>> modelFCM, int alphabetSIZE)
+{
+	double prob = 0; 
+	int ni  = 0;
+	int nctx = 0;
 
-//double Fcm::nBitsToCompress(map<string,map<char, int>> &model, string filename)
+	if (modelFCM.count(context) > 0)
+	{
+		//cout << "_____contextENTROU______" << endl;
+		ni = modelFCM[context][nextchar];
+		//cout << "ni: " << ni << endl;
+		
+		map <char, int> occurCtx = modelFCM[context];
+		for (auto i : occurCtx)
+		{
+			nctx += i.second;
+		}
+		//cout << "nctx: " << nctx << endl;
+	}
+
+	prob = -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
+	return prob;
+}
+
+
 double Fcm::nBitsToCompress(string filenameRi, string filenameT)
 {
 	map<string,map<char, int>> modelFCM = createModel(filenameRi);
 	
-	vector<string> contextWithNextChar;
 	int alphabetSIZE = alphabet.size();
 	double nbitsToCompress {0};	
-
-	//Fcm::printModel(modelFCM);
-
-	ifstream file;		// Read from a file 
-	file.open(filenameT);	// opens the file
-	if(!file) { 		// file couldn't be opened
-      		cerr << "Error: file could not be opened" << endl;
-      		exit(1);
-  	}
-
-	vector <char> info;
-  	// Obtain all the characters in the file to a vector<char>
-  	if (file.is_open()) {
-		char mychar;
-		while (file) {
-			mychar = file.get();
-			// descartar todos os caracteres especiais
-			//if ( ((mychar >= 'A' && mychar <= 'Z') || (mychar >='a' && mychar <= 'z')))
-			//info.push_back(tolower(mychar));	
-			if (mychar == '\n')	// eliminate paragraphs
-			{
-				info.push_back(' ');	
-			}else{
-				info.push_back(mychar);	
-			}
-		}
-	}
-	info.pop_back();	// remove the eof
-
-	
-	string contextNextChar {};
-	// Determine all the contexts+nextChar
-	for (size_t idx = 0; idx < info.size(); idx++)	// percorre todos os caracteres
-	{
-		//cout << "char: " << info[idx] << endl;
-		for (size_t c = idx ; c < (k+1+idx); c++)
-		{	
-			//cout << "c: " << c << endl;
-			contextNextChar += info[c];	
-		}
-		//cout << contextNextChar << endl;
-		contextWithNextChar.push_back(contextNextChar);
-		contextNextChar = "";
-	}
-
-	//cout << "alphabetSIZE: " << alphabetSIZE << endl;
+	vector<char> info = getCharsFromText(filenameT);
+	vector<string> contextWithNextChar = getContextWithNextChar(info);
 	
 	string context {};
 	char nextchar {};
 	double prob {0};
-	int ni {0};
-	int nctx {0};
-
-	
 	for (size_t s = 0; s < contextWithNextChar.size(); s++)
 	{
 		//cout << "inicial_contextWithNextChar: " << contextWithNextChar[s] << endl;
@@ -229,24 +203,7 @@ double Fcm::nBitsToCompress(string filenameRi, string filenameT)
 		nextchar = contextWithNextChar[s].substr(k,k)[0];
 		//cout << "nextchar: " << nextchar << endl;
 		
-		ni  = 0;
-		nctx = 0;
-		if (modelFCM.count(context) > 0)
-		{
-			//cout << "_____contextENTROU______" << endl;
-			ni = modelFCM[context][nextchar];
-			//cout << "ni: " << ni << endl;
-			
-			map <char, int> occurCtx = modelFCM[context];
-			for (auto i : occurCtx)
-			{
-				nctx += i.second;
-			}
-			//cout << "nctx: " << nctx << endl;
-		}
-
-		prob += -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
-		//cout << "prob" << prob << endl;
+		prob += calculateProbBits(context, nextchar, modelFCM, alphabetSIZE);
 	}
 		
 	nbitsToCompress = prob;
@@ -335,33 +292,6 @@ double Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 		
 	}
 	return nbitsToCompress;
-}
-*/
-
-/*
-double probBits(int alphabetSIZE, string context, char nextchar, map<string,map<char, int> modelFCM)
-{
-	double prob {0};
-	int ni {0};
-	int nctx {0};
-	if (modelFCM.count(context) > 0)
-	{
-		//cout << "_____contextENTROU______" << endl;
-		ni = modelFCM[context][nextchar];
-		//cout << "ni: " << ni << endl;
-		
-		map <char, int> occurCtx = modelFCM[context];
-		for (auto i : occurCtx)
-		{
-			nctx += i.second;
-		}
-		//cout << "nctx: " << nctx << endl;
-	}
-
-	prob = -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
-	//cout << "prob" << prob << endl;
-
-	return prob; 
 }
 */
 

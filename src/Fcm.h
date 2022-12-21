@@ -44,6 +44,8 @@ class Fcm {
 	*/
 	double modelEntropy(map<string,map<char, int>> &model); 
 
+	double calculateProbBits(string context, char nextchar, map<string,map<char, int>> modelFCM, int alphabetSIZE);
+
 	/**
 	*	@brief	
 	*	@param	
