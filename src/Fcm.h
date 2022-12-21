@@ -25,6 +25,12 @@ class Fcm {
 	*	@param alpha is the smoothing parameter
 	*/
 	Fcm(int k, double alpha);
+
+	void createAlphabet(vector<char> info);
+
+	vector<char> getCharsFromText(string filename);
+
+	vector<string> getContextWithNextChar(vector<char> info);
 	
 	/**
 	*	@bried Creates the FCM model

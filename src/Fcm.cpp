@@ -18,10 +18,10 @@ Fcm::Fcm(int k, double alpha)
 	this->alpha = alpha; 
 }
 
-map<string,map<char, int>> Fcm::createModel(string filename)
+// Obtain all the characters in the file to a vector<char>
+vector<char> Fcm::getCharsFromText(string filename)
 {
-	map<string,map<char, int>> model;
-	vector<string> contextWithNextChar;
+	vector <char> info;
 
 	ifstream file;		// Read from a file 
 	file.open(filename);	// opens the file
@@ -29,10 +29,8 @@ map<string,map<char, int>> Fcm::createModel(string filename)
       		cerr << "Error: file could not be opened" << endl;
       		exit(1);
   	}
-  
-  	vector <char> info;
-  	// Obtain all the characters in the file to a vector<char>
-  	if (file.is_open()) {
+
+	if (file.is_open()) {
 		char mychar;
 		while (file) {
 			mychar = file.get();
@@ -48,12 +46,16 @@ map<string,map<char, int>> Fcm::createModel(string filename)
 		}
 	}
 	info.pop_back();	// remove the eof
-	for (char c : info)
-	{
-		if ( ((c >= 'A' && c <= 'Z') || (c >='a' && c <= 'z')))
-			alphabet.insert(c);	// sem repeticoes
-	}
-	
+
+	return info;
+}
+
+
+// Determine all the contexts+nextChar
+vector<string> Fcm::getContextWithNextChar(vector<char> info)
+{
+
+	vector<string> contextWithNextChar;
 	string contextNextChar {};
 	// Determine all the contexts+nextChar
 	for (size_t idx = 0; idx < info.size(); idx++)	// percorre todos os caracteres
@@ -68,6 +70,24 @@ map<string,map<char, int>> Fcm::createModel(string filename)
 		contextWithNextChar.push_back(contextNextChar);
 		contextNextChar = "";
 	}
+	return contextWithNextChar;
+}
+
+void Fcm::createAlphabet(vector<char> info)
+{
+	for (char c : info)
+	{
+		if ( ((c >= 'A' && c <= 'Z') || (c >='a' && c <= 'z')))
+			alphabet.insert(c);	// sem repeticoes
+	}
+}
+
+map<string,map<char, int>> Fcm::createModel(string filename)
+{
+	map<string,map<char, int>> model;
+	vector<char> info = getCharsFromText(filename);
+	createAlphabet(info);
+	vector<string> contextWithNextChar = getContextWithNextChar(info);
 	
 	string context {};
 	char nextchar {};
@@ -89,9 +109,7 @@ map<string,map<char, int>> Fcm::createModel(string filename)
     		model[context] = empty;
     		model[context][nextchar]++;
 		}
-	}
-
-	
+	}	
 	return model;	
 }
 
@@ -227,7 +245,7 @@ double Fcm::nBitsToCompress(string filenameRi, string filenameT)
 			//cout << "nctx: " << nctx << endl;
 		}
 
-		prob += -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));  
+		prob += -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
 		//cout << "prob" << prob << endl;
 	}
 		
@@ -236,6 +254,116 @@ double Fcm::nBitsToCompress(string filenameRi, string filenameT)
 	
 	return nbitsToCompress;
 }
+
+/*
+double Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
+{
+
+	vector<map<string,map<char, int>>> totalModels;
+	vector<int> alphabetSize;
+	for (size_t i = 0; i < totalFilesRi.size(); i++)
+	{
+		totalModels.push_back(createModel(totalFilesRi[i]));	// criar o modelo para o texto respetivo
+		alphabetSize.push_back(alphabet.size());
+	}
+	//map<string,map<char, int>> modelFCM = createModel(filenameRi);
+	
+	vector<string> contextWithNextChar;
+	int alphabetSIZE = alphabet.size();
+	double nbitsToCompress {0};	
+
+	//Fcm::printModel(modelFCM);
+
+	ifstream file;		// Read from a file 
+	file.open(filenameT);	// opens the file
+	if(!file) { 		// file couldn't be opened
+      		cerr << "Error: file could not be opened" << endl;
+      		exit(1);
+  	}
+
+	vector <char> info;
+  	// Obtain all the characters in the file to a vector<char>
+  	if (file.is_open()) {
+		char mychar;
+		while (file) {
+			mychar = file.get();
+			// descartar todos os caracteres especiais
+			//if ( ((mychar >= 'A' && mychar <= 'Z') || (mychar >='a' && mychar <= 'z')))
+			//info.push_back(tolower(mychar));	
+			if (mychar == '\n')	// eliminate paragraphs
+			{
+				info.push_back(' ');	
+			}else{
+				info.push_back(mychar);	
+			}
+		}
+	}
+	info.pop_back();	// remove the eof
+
+	
+	string contextNextChar {};
+	// Determine all the contexts+nextChar
+	for (size_t idx = 0; idx < info.size(); idx++)	// percorre todos os caracteres
+	{
+		//cout << "char: " << info[idx] << endl;
+		for (size_t c = idx ; c < (k+1+idx); c++)
+		{	
+			//cout << "c: " << c << endl;
+			contextNextChar += info[c];	
+		}
+		//cout << contextNextChar << endl;
+		contextWithNextChar.push_back(contextNextChar);
+		contextNextChar = "";
+	}
+
+	//cout << "alphabetSIZE: " << alphabetSIZE << endl;
+	
+	string context {};
+	char nextchar {};
+	double probModel {0};
+	//int ni {0};
+	//int nctx {0};
+	for (size_t s = 0; s < contextWithNextChar.size(); s++)
+	{
+		//cout << "inicial_contextWithNextChar: " << contextWithNextChar[s] << endl;
+		context = contextWithNextChar[s].substr(0,k);
+		//cout << "contextINIT: " << context << endl;
+		nextchar = contextWithNextChar[s].substr(k,k)[0];
+		//cout << "nextchar: " << nextchar << endl;
+
+		probBits()
+		
+	}
+	return nbitsToCompress;
+}
+*/
+
+/*
+double probBits(int alphabetSIZE, string context, char nextchar, map<string,map<char, int> modelFCM)
+{
+	double prob {0};
+	int ni {0};
+	int nctx {0};
+	if (modelFCM.count(context) > 0)
+	{
+		//cout << "_____contextENTROU______" << endl;
+		ni = modelFCM[context][nextchar];
+		//cout << "ni: " << ni << endl;
+		
+		map <char, int> occurCtx = modelFCM[context];
+		for (auto i : occurCtx)
+		{
+			nctx += i.second;
+		}
+		//cout << "nctx: " << nctx << endl;
+	}
+
+	prob = -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
+	//cout << "prob" << prob << endl;
+
+	return prob; 
+}
+*/
 
 void Fcm::saveModelToFile(map<string,map<char, int>> &model, string filename)
 {
