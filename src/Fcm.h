@@ -51,6 +51,7 @@ class Fcm {
 	double nBitsToCompress(string filenameRi, string filenameT);
 
 	void locateLang(vector<string> totalFilesRi, string filenameT);
+	double getBitsForChar(int alphabetSIZE, string context, char nextchar, map<string,map<char, int>> modelFCM);
 
 
 	void saveModelToFile(map<string,map<char, int>> &model, string filename);

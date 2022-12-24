@@ -72,7 +72,7 @@ void Fcm::createAlphabet(vector<char> info)
 {
 	for (char c : info)
 	{
-		if ( ((c >= 'A' && c <= 'Z') || (c >='a' && c <= 'z')))
+        if (!(c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v')) //if not blank space
 			alphabet.insert(c);	// sem repeticoes
 	}
 }
@@ -214,8 +214,31 @@ double Fcm::nBitsToCompress(string filenameRi, string filenameT)
 	return nbitsToCompress;
 }
 
+//return estimated bits for given char after given context in the given model
+double Fcm::getBitsForChar(int alphabetSIZE, string context, char nextchar, map<string,map<char, int>> modelFCM) {
+	int ni  = 0;
+	int nctx = 0;
+	if (modelFCM.count(context) > 0) //se encontra o contexto no modelo
+	{
+		//contagem de vezes que apareceu next char, dado que aconteceu o contexto
+		if(modelFCM[context].count(nextchar)) {
+			ni = modelFCM[context][nextchar];
+		}
+		//contagem de vezes que apareceu o contexto
+		map <char, int> occurCtx = modelFCM[context];
+		for (auto i : occurCtx)
+		{
+			nctx += i.second;
+		}
+
+	}
+	//numero de bits para codificar o caractere
+	return -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
+}
+
 void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 {
+	cout << "creating models..."<<endl;
 
 	vector<map<string,map<char, int>>> totalModels;	// Cada posicao contem M1, M2, ..., Mn
 	vector<int> alphabetSizeM;	// tamanho do alfabeto para cada modelo M1, M2, ..., Mn
@@ -230,60 +253,60 @@ void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 	}
 	cout << "Created Models !" << endl;
 	cout << "nModels: " << totalModels.size() << endl;
-
+	
+	//inicialization
 	vector<char> info = getCharsFromText(filenameT);
 	vector<string> contextWithNextChar = getContextWithNextChar(info);
+	double bits {};
+	int sensit = 3; //fator determinante do quão sensível o algoritmo é a mudanças de língua
+	double curMedia = 10000; //big number
+	int curLang = 0, prevLang = 0;
+
+	double values[totalModels.size()][sensit] {}; //modelo X char(sensitivity)
+	double media[totalModels.size()] {};
 	
-
-	string context {};
-	char nextchar {};
-	double prob {0};
-	int ni {0};
-	int nctx {0};
-	// Percorrer todos os modelos 
-	for (size_t m = 0; m < totalModels.size(); m++)
-	{
-		map<string,map<char, int>> modelFCM = totalModels[m];
-		int alphabetSIZE = alphabetSizeM[m];
-		cout << "alphabetSIZE: " << alphabetSIZE << endl;
-
-		for (size_t s = 0; s < contextWithNextChar.size(); s++)
-		{
-			context = contextWithNextChar[s].substr(0,k);
-			nextchar = contextWithNextChar[s].substr(k,k)[0];
-
-			ni  = 0;
-			nctx = 0;
-			prob = 0;
-			if (modelFCM.count(context) > 0)
-			{
-				ni = modelFCM[context][nextchar];
-				
-				map <char, int> occurCtx = modelFCM[context];
-				for (auto i : occurCtx)
-				{
-					nctx += i.second;
-				}
+	cout << "Searching..." << endl;
+	//percorrer os caracteres
+	for (size_t s = 0; s < contextWithNextChar.size(); s++) { // k a size
+		cerr << contextWithNextChar[s] << " | ";
+		// Percorrer todos os modelos
+		for (size_t m = 0; m < totalModels.size(); m++) {
+			bits = getBitsForChar(alphabetSizeM[m], contextWithNextChar[s].substr(0,k), contextWithNextChar[s].substr(k,k)[0], totalModels[m]);
+			
+			//determinação do valor médio de bits
+			//cout << "s: " << s << endl;
+			if(s < sensit) {
+				values[m][s] = bits;
+				media[m] += bits/sensit;
 			}
+			else{
+				//media - old av bits + new av bits
+				media[m] = media[m] + bits/sensit - values[m][s%sensit]/sensit;
+				values[m][s%sensit] = bits;
+			}
+			//getchar();
 
-			prob = -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
-			probM.push_back(prob);
+			//comparação para ter a menor média
+			if(media[m] < curMedia && m != prevLang) {
+				cout << endl;
+				for(int i = 0; i<totalModels.size(); i++)
+					cout << i <<": " << media[i] << " | ";
+				cout << "\n" << media[m] << " < " << curMedia << endl;
+				cout << m << " < " << curLang << endl;
+				getchar();
+				curMedia = media[m];
+				curLang = m;
+			}
+			//cout << "curMedia: " << curMedia << endl;
+			//getchar();
 		}
-		probModels.push_back(probM);
-		probM.clear();
-	}
-
-	cout << "Probabilidade dos modelos determinada !" << endl;
-
-	
-	for (size_t i = 0; i < probModels.size(); i++)
-	{
-		cout << "Model: " << i+1 << endl;
-		for(size_t j = 0; j < probModels[i].size(); j++)
-		{
-			cout << probModels[i][j] << "  ";
+		//analizemos o resultado
+		if(prevLang != curLang){
+			cout << "Language changed from: " << totalFilesRi[prevLang] << " to: " << totalFilesRi[curLang] << endl;
+			getchar();
+			prevLang = curLang;
 		}
-		cout << "\n\n" << endl;
+
 	}
 }
 
