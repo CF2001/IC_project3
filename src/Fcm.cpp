@@ -7,6 +7,10 @@
 #include <algorithm>
 #include <math.h>
 
+//#include <stdio.h>
+
+#include <time.h>
+
 #include "Fcm.h"
 
 using namespace std;
@@ -23,7 +27,7 @@ vector<char> Fcm::getCharsFromText(string filename)
 	ifstream file;		// Read from a file 
 	file.open(filename);	// opens the file
 	if(!file) { 		// file couldn't be opened
-      		cerr << "Error: file could not be opened" << endl;
+      		cerr << "Error: file " << filename << " could not be opened" << endl;
       		exit(1);
   	}
   
@@ -236,6 +240,47 @@ double Fcm::getBitsForChar(int alphabetSIZE, string context, char nextchar, map<
 	return -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
 }
 
+void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
+	cout << "\nCreating models statistics (may vary from OS to OS and how busy the system is)"<<endl;
+
+	clock_t start1, end1;
+	double elapsed = 0, time;
+	int count = 0;
+	char* f;
+	for (size_t i = 0; i < totalFilesRi.size(); i++)
+	{
+		cout << "\nProcessing: \n\t" << totalFilesRi[i] << endl;
+
+		//open file
+		f = &*totalFilesRi[i].begin(); //convert from string to c*
+		FILE* file = fopen(f,"r");
+		if(file == NULL) {
+      		cerr << "Error: file " << filename << " could not be opened" << endl;
+			continue;
+		}
+
+		//get size of file
+		count = 0;
+		while(fgetc(file) != EOF) count++;
+		cout << "Size of file is: " << count << " bytes" << endl;
+
+		//get time to compress
+		start1 = clock();
+		createModel(totalFilesRi[i]);
+		end1 = clock();
+		time = double(end1 - start1)/CLOCKS_PER_SEC;
+		elapsed += time;
+		cout << "Elapsed Time: " << time << " seconds" << endl;
+
+		cout << "Compressed: " << count/time/pow(10,6) << " megabytes per second" << endl;
+
+
+		fclose(file);
+	}
+	cout << "\nTotal of " << totalFilesRi.size() << " models created in " << elapsed << " seconds." << endl;
+	
+}
+
 void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 {
 	cout << "creating models..."<<endl;
@@ -245,27 +290,26 @@ void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 	vector<vector<double>> probModels;		// [<prob's M1>, <prob's M2>, ..., <prob's Mn>]
 	vector<double> probM;
 
+	//criação dos modelos
 	for (size_t i = 0; i < totalFilesRi.size(); i++)
 	{
 		//cout << "Languages: " << totalFilesRi[i] << endl;
 		totalModels.push_back(createModel(totalFilesRi[i]));	// criar o modelo para o texto respetivo
 		alphabetSizeM.push_back(alphabet.size());
 	}
-	cout << "Created Models !" << endl;
-	cout << "nModels: " << totalModels.size() << endl;
-	
-	//inicialization
+
+	//inicialização
 	vector<char> info = getCharsFromText(filenameT);
 	vector<string> contextWithNextChar = getContextWithNextChar(info);
 	double bits {};
 	int sensit = 3; //fator determinante do quão sensível o algoritmo é a mudanças de língua
 	double curMedia = 10000; //big number
-	int curLang = 0, prevLang = 0;
+	int curLang = 0, prevLang = -1;
 
 	double values[totalModels.size()][sensit] {}; //modelo X char(sensitivity)
 	double media[totalModels.size()] {};
 	
-	cout << "Searching..." << endl;
+	cout << "\nSearching..." << endl;
 	//percorrer os caracteres
 	for (size_t s = 0; s < contextWithNextChar.size(); s++) { // k a size
 		cerr << contextWithNextChar[s] << " | ";
@@ -280,8 +324,8 @@ void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 				media[m] += bits/sensit;
 			}
 			else{
-				//media - old av bits + new av bits
-				media[m] = media[m] + bits/sensit - values[m][s%sensit]/sensit;
+				//media + new av. bits - old av. bits
+				media[m] += (bits/sensit - values[m][s%sensit]/sensit);
 				values[m][s%sensit] = bits;
 			}
 			//getchar();
@@ -302,40 +346,18 @@ void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 		}
 		//analizemos o resultado
 		if(prevLang != curLang){
-			cout << "Language changed from: " << totalFilesRi[prevLang] << " to: " << totalFilesRi[curLang] << endl;
-			getchar();
+			if(prevLang != -1) {
+				cout << "Language changed from: " << totalFilesRi[prevLang] << " to: " << totalFilesRi[curLang] << " at position " <<  s << endl;
+				getchar();
+			}
+			else {
+				cout << "Language at position 0 is " << totalFilesRi[curLang] << endl;
+			}
 			prevLang = curLang;
 		}
 
 	}
 }
-
-/*
-double probBits(int alphabetSIZE, string context, char nextchar, map<string,map<char, int> modelFCM)
-{
-	double prob {0};
-	int ni {0};
-	int nctx {0};
-	if (modelFCM.count(context) > 0)
-	{
-		//cout << "_____contextENTROU______" << endl;
-		ni = modelFCM[context][nextchar];
-		//cout << "ni: " << ni << endl;
-		
-		map <char, int> occurCtx = modelFCM[context];
-		for (auto i : occurCtx)
-		{
-			nctx += i.second;
-		}
-		//cout << "nctx: " << nctx << endl;
-	}
-
-	prob = -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
-	//cout << "prob" << prob << endl;
-
-	return prob; 
-}
-*/
 
 void Fcm::saveModelToFile(map<string,map<char, int>> &model, string filename)
 {

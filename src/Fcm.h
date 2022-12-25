@@ -52,7 +52,7 @@ class Fcm {
 
 	void locateLang(vector<string> totalFilesRi, string filenameT);
 	double getBitsForChar(int alphabetSIZE, string context, char nextchar, map<string,map<char, int>> modelFCM);
-
+	void statisticsModelCreation(vector<string> totalFilesRi);
 
 	void saveModelToFile(map<string,map<char, int>> &model, string filename);
 	

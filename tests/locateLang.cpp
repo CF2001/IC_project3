@@ -39,9 +39,9 @@ int main(int argc, char *argv[])
 		cin >> smoothing;
 	}
 	*/
-	
-	Fcm f {order, smoothing}; 
 
+	Fcm f {order, smoothing}; 
+	//f.statisticsModelCreation(modelLanguages);
 	f.locateLang(modelLanguages, languageToDiscover);
 
 }
