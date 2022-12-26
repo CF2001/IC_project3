@@ -255,7 +255,7 @@ void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 		f = &*totalFilesRi[i].begin(); //convert from string to c*
 		FILE* file = fopen(f,"r");
 		if(file == NULL) {
-      		cerr << "Error: file " << filename << " could not be opened" << endl;
+      		cerr << "Error: file " << totalFilesRi[i] << " could not be opened" << endl;
 			continue;
 		}
 
@@ -281,9 +281,9 @@ void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 	
 }
 
-void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
+map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, int sensit, bool verb)
 {
-	cout << "creating models..."<<endl;
+	cout << "\ncreating models..."<<endl;
 
 	vector<map<string,map<char, int>>> totalModels;	// Cada posicao contem M1, M2, ..., Mn
 	vector<int> alphabetSizeM;	// tamanho do alfabeto para cada modelo M1, M2, ..., Mn
@@ -293,32 +293,31 @@ void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 	//criação dos modelos
 	for (size_t i = 0; i < totalFilesRi.size(); i++)
 	{
-		//cout << "Languages: " << totalFilesRi[i] << endl;
 		totalModels.push_back(createModel(totalFilesRi[i]));	// criar o modelo para o texto respetivo
 		alphabetSizeM.push_back(alphabet.size());
+		if(verb) cout << "created model for " << totalFilesRi[i] << endl;
 	}
 
 	//inicialização
 	vector<char> info = getCharsFromText(filenameT);
 	vector<string> contextWithNextChar = getContextWithNextChar(info);
 	double bits {};
-	int sensit = 3; //fator determinante do quão sensível o algoritmo é a mudanças de língua
 	double curMedia = 10000; //big number
 	int curLang = 0, prevLang = -1;
+	map<int, string> langChanges {};
 
 	double values[totalModels.size()][sensit] {}; //modelo X char(sensitivity)
 	double media[totalModels.size()] {};
 	
-	cout << "\nSearching..." << endl;
+	cout << "\nLocating languages..." << endl;
 	//percorrer os caracteres
 	for (size_t s = 0; s < contextWithNextChar.size(); s++) { // k a size
-		cerr << contextWithNextChar[s] << " | ";
+		if(verb) cerr << contextWithNextChar[s] << " | ";
 		// Percorrer todos os modelos
 		for (size_t m = 0; m < totalModels.size(); m++) {
 			bits = getBitsForChar(alphabetSizeM[m], contextWithNextChar[s].substr(0,k), contextWithNextChar[s].substr(k,k)[0], totalModels[m]);
 			
 			//determinação do valor médio de bits
-			//cout << "s: " << s << endl;
 			if(s < sensit) {
 				values[m][s] = bits;
 				media[m] += bits/sensit;
@@ -330,33 +329,35 @@ void Fcm::locateLang(vector<string> totalFilesRi, string filenameT)
 			}
 			//getchar();
 
-			//comparação para ter a menor média
+			//comparação para ter a menor media
 			if(media[m] < curMedia && m != prevLang) {
-				cout << endl;
-				for(int i = 0; i<totalModels.size(); i++)
-					cout << i <<": " << media[i] << " | ";
-				cout << "\n" << media[m] << " < " << curMedia << endl;
-				cout << m << " < " << curLang << endl;
-				getchar();
 				curMedia = media[m];
 				curLang = m;
 			}
-			//cout << "curMedia: " << curMedia << endl;
-			//getchar();
 		}
 		//analizemos o resultado
 		if(prevLang != curLang){
 			if(prevLang != -1) {
+				if(verb) {
+					cout << endl;
+					for(int i = 0; i<totalModels.size(); i++)
+						cout << "model " << i <<" has average " << media[i] << " bits\n";
+					cout << "model " << prevLang << " average < model " << curLang << " average" << endl;
+					//getchar();
+				}
+				
 				cout << "Language changed from: " << totalFilesRi[prevLang] << " to: " << totalFilesRi[curLang] << " at position " <<  s << endl;
-				getchar();
+				langChanges.insert({ s , totalFilesRi[curLang] });
 			}
 			else {
-				cout << "Language at position 0 is " << totalFilesRi[curLang] << endl;
+				cout << "Language at start is " << totalFilesRi[curLang] << endl;
+				langChanges.insert({ 0 , totalFilesRi[curLang] });
 			}
 			prevLang = curLang;
 		}
 
 	}
+	return langChanges;
 }
 
 void Fcm::saveModelToFile(map<string,map<char, int>> &model, string filename)

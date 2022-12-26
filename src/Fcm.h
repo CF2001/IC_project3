@@ -50,7 +50,7 @@ class Fcm {
 	*/
 	double nBitsToCompress(string filenameRi, string filenameT);
 
-	void locateLang(vector<string> totalFilesRi, string filenameT);
+	map<int, string> locateLang(vector<string> totalFilesRi, string filenameT, int sensit, bool verb);
 	double getBitsForChar(int alphabetSIZE, string context, char nextchar, map<string,map<char, int>> modelFCM);
 	void statisticsModelCreation(vector<string> totalFilesRi);
 
