@@ -6,15 +6,13 @@
 #include <ctype.h>
 #include <algorithm>
 #include <math.h>
-
-//#include <stdio.h>
-
 #include <time.h>
 
 #include "Fcm.h"
 
-using namespace std;
+#define positiveInfinite 1.5935e250*7.948e110
 
+using namespace std;
 
 Fcm::Fcm(int k, double alpha)
 {
@@ -27,7 +25,7 @@ vector<char> Fcm::getCharsFromText(string filename)
 	ifstream file;		// Read from a file 
 	file.open(filename);	// opens the file
 	if(!file) { 		// file couldn't be opened
-      		cerr << "Error: file " << filename << " could not be opened" << endl;
+      		cout << "Error: file " << filename << " could not be opened" << endl;
       		exit(1);
   	}
   
@@ -255,8 +253,7 @@ void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 		f = &*totalFilesRi[i].begin(); //convert from string to c*
 		FILE* file = fopen(f,"r");
 		if(file == NULL) {
-      		cerr << "Error: file " << totalFilesRi[i] << " could not be opened" << endl;
-			continue;
+      		cout << "Error: file " << totalFilesRi[i] << " could not be opened" << endl;
 		}
 
 		//get size of file
@@ -272,16 +269,14 @@ void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 		elapsed += time;
 		cout << "Elapsed Time: " << time << " seconds" << endl;
 
-		cout << "Compressed: " << count/time/pow(10,6) << " megabytes per second" << endl;
-
+		cout << "Processed: " << count/time/pow(10,6) << " megabytes per second" << endl;
 
 		fclose(file);
 	}
 	cout << "\nTotal of " << totalFilesRi.size() << " models created in " << elapsed << " seconds." << endl;
-	
 }
 
-map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, int sensit, bool verb)
+map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, int sensitivity, bool verbose)
 {
 	cout << "\ncreating models..."<<endl;
 
@@ -295,53 +290,53 @@ map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, 
 	{
 		totalModels.push_back(createModel(totalFilesRi[i]));	// criar o modelo para o texto respetivo
 		alphabetSizeM.push_back(alphabet.size());
-		if(verb) cout << "created model for " << totalFilesRi[i] << endl;
+		if(verbose) cout << "created model for " << totalFilesRi[i] << endl;
 	}
 
 	//inicialização
 	vector<char> info = getCharsFromText(filenameT);
 	vector<string> contextWithNextChar = getContextWithNextChar(info);
 	double bits {};
-	double curMedia = 10000; //big number
+	double curAverage = positiveInfinite;
 	int curLang = 0, prevLang = -1;
 	map<int, string> langChanges {};
 
-	double values[totalModels.size()][sensit] {}; //modelo X char(sensitivity)
-	double media[totalModels.size()] {};
+	double averageWindow[totalModels.size()][sensitivity] {}; //modelo X char(sensitivity)
+	double average[totalModels.size()] {};
 	
 	cout << "\nLocating languages..." << endl;
 	//percorrer os caracteres
 	for (size_t s = 0; s < contextWithNextChar.size(); s++) { // k a size
-		if(verb) cerr << contextWithNextChar[s] << " | ";
+		if(verbose) cout << contextWithNextChar[s] << " | ";
 		// Percorrer todos os modelos
 		for (size_t m = 0; m < totalModels.size(); m++) {
 			bits = getBitsForChar(alphabetSizeM[m], contextWithNextChar[s].substr(0,k), contextWithNextChar[s].substr(k,k)[0], totalModels[m]);
 			
 			//determinação do valor médio de bits
-			if(s < sensit) {
-				values[m][s] = bits;
-				media[m] += bits/sensit;
+			if(s < sensitivity) {
+				averageWindow[m][s] = bits;
+				average[m] += bits/sensitivity;
 			}
 			else{
-				//media + new av. bits - old av. bits
-				media[m] += (bits/sensit - values[m][s%sensit]/sensit);
-				values[m][s%sensit] = bits;
+				//average + new av. bits - old av. bits
+				average[m] += (bits/sensitivity - averageWindow[m][s%sensitivity]/sensitivity);
+				averageWindow[m][s%sensitivity] = bits;
 			}
 			//getchar();
 
 			//comparação para ter a menor media
-			if(media[m] < curMedia && m != prevLang) {
-				curMedia = media[m];
+			if(average[m] < curAverage && m != prevLang) {
+				curAverage = average[m];
 				curLang = m;
 			}
 		}
-		//analizemos o resultado
+		//análise do resultado
 		if(prevLang != curLang){
 			if(prevLang != -1) {
-				if(verb) {
+				if(verbose) {
 					cout << endl;
 					for(int i = 0; i<totalModels.size(); i++)
-						cout << "model " << i <<" has average " << media[i] << " bits\n";
+						cout << "model " << i <<" has average " << average[i] << " bits\n";
 					cout << "model " << prevLang << " average < model " << curLang << " average" << endl;
 					//getchar();
 				}
