@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <math.h>
 #include <time.h>
+#include <numeric>
 
 #include "Fcm.h"
 
@@ -278,80 +279,106 @@ void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 
 map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, int sensitivity, bool verbose)
 {
-	cout << "\ncreating models..."<<endl;
-
+	//declaração e inicialização
 	vector<map<string,map<char, int>>> totalModels;	// Cada posicao contem M1, M2, ..., Mn
 	vector<int> alphabetSizeM;	// tamanho do alfabeto para cada modelo M1, M2, ..., Mn
 	vector<vector<double>> probModels;		// [<prob's M1>, <prob's M2>, ..., <prob's Mn>]
 	vector<double> probM;
 
+	vector<char> info = getCharsFromText(filenameT);
+	vector<string> contextWithNextChar = getContextWithNextChar(info);
+	double curAverage = positiveInfinite;
+	int curLang = 0, prevLang = -1;
+	map<int, string> langChanges {};
+
+	int ni, nctx;
+	map <char, int> occurCtx;
+	string context;
+	char nextchar;
+	double bits;
+
+	clock_t start1, end1;
+	double elapsed = 0;
+
 	//criação dos modelos
+	if(verbose) cout << "\ncreating models..."<<endl;
 	for (size_t i = 0; i < totalFilesRi.size(); i++)
 	{
 		totalModels.push_back(createModel(totalFilesRi[i]));	// criar o modelo para o texto respetivo
 		alphabetSizeM.push_back(alphabet.size());
 		if(verbose) cout << "created model for " << totalFilesRi[i] << endl;
 	}
-
-	//inicialização
-	vector<char> info = getCharsFromText(filenameT);
-	vector<string> contextWithNextChar = getContextWithNextChar(info);
-	double bits {};
-	double curAverage = positiveInfinite;
-	int curLang = 0, prevLang = -1;
-	map<int, string> langChanges {};
-
+	//declaração janela da média
 	double averageWindow[totalModels.size()][sensitivity] {}; //modelo X char(sensitivity)
 	double average[totalModels.size()] {};
 	
-	cout << "\nLocating languages..." << endl;
-	//percorrer os caracteres
+	
+	//início deteção do idioma
+	if(verbose) cout << "\nLocating languages..." << endl;
+	start1 = clock();
+	//percorrer todos os contextos com caracteres
 	for (size_t s = 0; s < contextWithNextChar.size(); s++) { // k a size
-		if(verbose) cout << contextWithNextChar[s] << " | ";
+		//if(verbose) cout << "|" << contextWithNextChar[s] << "|";
 		// Percorrer todos os modelos
 		for (size_t m = 0; m < totalModels.size(); m++) {
-			bits = getBitsForChar(alphabetSizeM[m], contextWithNextChar[s].substr(0,k), contextWithNextChar[s].substr(k,k)[0], totalModels[m]);
-			
-			//determinação do valor médio de bits
-			if(s < sensitivity) {
-				averageWindow[m][s] = bits;
-				average[m] += bits/sensitivity;
+
+			//cáculo dos bits (get bits for char)
+			ni  = 0;
+			nctx = 0;
+			context = contextWithNextChar[s].substr(0,k);
+			nextchar = contextWithNextChar[s].substr(k,k)[0];
+			if (totalModels[m].count(context) > 0) //se encontra o contexto no modelo
+			{
+				//contagem de vezes que apareceu next char, dado que aconteceu o contexto
+				if(totalModels[m][context].count(nextchar)) {
+					ni = totalModels[m][context][nextchar];
+				}
+				//contagem de vezes que apareceu o contexto
+				occurCtx = totalModels[m][context];
+				for (auto i : occurCtx)	nctx += i.second;
 			}
-			else{
-				//average + new av. bits - old av. bits
+			//numero de bits para codificar o caractere
+			bits = -log2(((ni + alpha) / (nctx + (alpha*alphabetSizeM[m]))));
+
+			//atualização da janela de sensibilidade
+			if(s > sensitivity) {
 				average[m] += (bits/sensitivity - averageWindow[m][s%sensitivity]/sensitivity);
 				averageWindow[m][s%sensitivity] = bits;
+			} else {
+				average[m] += bits/sensitivity;
+				averageWindow[m][s] = bits;
 			}
-			//getchar();
 
 			//comparação para ter a menor media
 			if(average[m] < curAverage && m != prevLang) {
 				curAverage = average[m];
 				curLang = m;
 			}
+			cout << "curLang: " << curLang << endl;
+			cout << "curAverage: " << curAverage << endl;
+			cout << "prevLang: " << prevLang << endl;
+			if(prevLang != -1) cout << "prevAverage: " << average[prevLang] << endl;
 		}
 		//análise do resultado
 		if(prevLang != curLang){
 			if(prevLang != -1) {
-				if(verbose) {
-					cout << endl;
-					for(int i = 0; i<totalModels.size(); i++)
-						cout << "model " << i <<" has average " << average[i] << " bits\n";
-					cout << "model " << prevLang << " average < model " << curLang << " average" << endl;
-					//getchar();
-				}
-				
-				cout << "Language changed from: " << totalFilesRi[prevLang] << " to: " << totalFilesRi[curLang] << " at position " <<  s << endl;
+				cout << "\nLanguage changed from: " << totalFilesRi[prevLang] << " to: " << totalFilesRi[curLang] << " at position " <<  s << endl;
+				cout << average[curLang] << " < " << average[prevLang] << "    averages comparison" << endl;
+				cout << "context of change: " << contextWithNextChar[s] << endl;
 				langChanges.insert({ s , totalFilesRi[curLang] });
 			}
 			else {
-				cout << "Language at start is " << totalFilesRi[curLang] << endl;
+				cout << "\nLanguage at start is " << totalFilesRi[curLang] << endl;
 				langChanges.insert({ 0 , totalFilesRi[curLang] });
 			}
 			prevLang = curLang;
 		}
-
 	}
+	end1 = clock();
+	elapsed = double(end1 - start1)/CLOCKS_PER_SEC;
+	if(verbose) cout << "\ndone in: "  << elapsed << " seconds \n" <<
+	"average context processing time: "<< elapsed/contextWithNextChar.size()*1000 << " miliseconds" << endl;
+
 	return langChanges;
 }
 

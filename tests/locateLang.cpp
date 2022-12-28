@@ -12,15 +12,15 @@ int main(int argc, char *argv[])
 {
 	cout << endl;
 	int opt;
-	int order = 7, sensitivity = 3;
+	int order = 7, window = 3;
 	double smoothing = 0.1;
 	char* path;
 	bool verb = false, stats = false;
 	string languageToDiscover;
 	vector<string> modelLanguages;
 
-	//opções order (-o), smothing (-s) e sensitivity (-t) precisam de argumentos
-    while ((opt = getopt(argc, argv, "t:vo:s:h")) != -1)
+	//opções order (-o), smothing (-s) e window (-w) precisam de argumentos
+    while ((opt = getopt(argc, argv, "iw:vo:s:h")) != -1)
     {
         switch (opt)
         {
@@ -29,12 +29,12 @@ int main(int argc, char *argv[])
 				cout << "statistics ON" << endl;
 				break;
 			}
-			case 't': { //janela da média para suavização da curva
-				int t = atoi(optarg);
-				if(t > 0) {
-					sensitivity = t;
+			case 'w': { //janela da média para suavização da curva
+				int w = atoi(optarg);
+				if(w > 0) {
+					window = w;
 				} else {
-					cout << "sensitivity parameter must be grater than 0"<< endl;
+					cout << "window parameter must be grater than 0"<< endl;
 					cout << usage << endl;
 					return -1;
 				}
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 			}
             case 'v': { //verbose
 				verb = true;
-				cout << "verbose ON\n" << endl;
+				cout << "verbose ON" << endl;
 				break;
 			}
 			case 'o': { //order parameter
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 						"-v Turns verbose on, the program will display each step of the process and all the context processed.\n" <<
 						"-o Takes as required parameter an <integer> number. Sets the order in which the models will be produced (i.e. the length of the Markov's chain). Default value is 7.\n" <<
 						"-s Takes as required parameter a <double> precision number. Sets the smoothing parameter so it can have a generic probability even if the context and character never shows on the training data. Default value is 0.1.\n" <<
-						"-t Takes as required parameter <integer> number. Sets the size of the floating window used to compare probabilities between models. It will have an influence on the sensitivity of the algorithm. Default value is 3.\n" << 
+						"-w Takes as required parameter <integer> number. Sets the size of the floating window used to compare probabilities between models. It will have an influence on the sensitivity of the algorithm. Default value is 3.\n" << 
 						"\n" <<
 						"note 1: It's required at least one model file and one test file (always the last argument)\n" <<
 						"note 2: A model file can be a path to a folder containing text files, each representing one model/language" << endl;
@@ -100,7 +100,12 @@ int main(int argc, char *argv[])
 	}
 	
 	//processa argumentos obrigatórios
-	if(verb) cout << "got files: " << endl;
+	if(verb) {
+		cout << "order: " << order << endl;
+		cout << "smoothing: " << smoothing << endl;
+		cout << "sensitivity window: " << window << endl;
+		cout << "\ngot files to model: " << endl;
+		}
 	for (int i = optind; i < argc-1; i++) {
 		path = argv[i];
 		if (filesystem::is_directory(path)) {
@@ -136,7 +141,7 @@ int main(int argc, char *argv[])
 	//get statistics
 	if(stats) f.statisticsModelCreation(modelLanguages);
 	//locate languages
-	map<int,string> langChange = f.locateLang(modelLanguages, languageToDiscover, sensitivity, verb);
+	map<int,string> langChange = f.locateLang(modelLanguages, languageToDiscover, window, verb);
 
 	return 0;
 }
