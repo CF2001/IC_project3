@@ -39,7 +39,7 @@ vector<char> Fcm::getCharsFromText(string filename)
 			// descartar todos os caracteres especiais
 			//if ( ((mychar >= 'A' && mychar <= 'Z') || (mychar >='a' && mychar <= 'z')))
 			//info.push_back(tolower(mychar));	
-			if (mychar == '\n')	// eliminate paragraphs
+			if (mychar == '\n' || mychar == '\t' || mychar == '\n' || mychar == '\r' || mychar == '\f' || mychar == '\v')	// eliminate paragraphs
 			{
 				info.push_back(' ');	
 			}else{
@@ -260,7 +260,7 @@ void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 		//get size of file
 		count = 0;
 		while(fgetc(file) != EOF) count++;
-		cout << "Size of file is: " << count << " bytes" << endl;
+		cout << "Size of file: " << count << " bytes" << endl;
 
 		//get time to compress
 		start1 = clock();
@@ -318,7 +318,7 @@ map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, 
 	start1 = clock();
 	//percorrer todos os contextos com caracteres
 	for (size_t s = 0; s < contextWithNextChar.size(); s++) { // k a size
-		//if(verbose) cout << "|" << contextWithNextChar[s] << "|";
+		if(verbose) cout << "|" << contextWithNextChar[s] << "|";
 		// Percorrer todos os modelos
 		for (size_t m = 0; m < totalModels.size(); m++) {
 
@@ -339,31 +339,36 @@ map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, 
 			}
 			//numero de bits para codificar o caractere
 			bits = -log2(((ni + alpha) / (nctx + (alpha*alphabetSizeM[m]))));
+			//cout << "model: " << m << "| bits: " << bits << endl;
 
 			//atualização da janela de sensibilidade
-			if(s > sensitivity) {
-				average[m] += (bits/sensitivity - averageWindow[m][s%sensitivity]/sensitivity);
-				averageWindow[m][s%sensitivity] = bits;
-			} else {
-				average[m] += bits/sensitivity;
+			if(s < sensitivity) {
+				average[m] += bits/((float)sensitivity);
 				averageWindow[m][s] = bits;
+			}else{
+				//media - old av bits + new av bits
+				average[m] = average[m] + bits/((float)sensitivity) - averageWindow[m][s%sensitivity]/((float)sensitivity);
+				averageWindow[m][s%sensitivity] = bits;
 			}
+
 
 			//comparação para ter a menor media
 			if(average[m] < curAverage && m != prevLang) {
 				curAverage = average[m];
 				curLang = m;
 			}
-			cout << "curLang: " << curLang << endl;
-			cout << "curAverage: " << curAverage << endl;
-			cout << "prevLang: " << prevLang << endl;
-			if(prevLang != -1) cout << "prevAverage: " << average[prevLang] << endl;
 		}
+
+		//cout << "curLang: " << curLang << " | curAverage: " << curAverage << endl;
+		//cout << "prevLang: " << prevLang;
+		//if(prevLang != -1) cout << " | prevAverage: " << average[prevLang];
+		//cout << endl;
+
 		//análise do resultado
 		if(prevLang != curLang){
 			if(prevLang != -1) {
 				cout << "\nLanguage changed from: " << totalFilesRi[prevLang] << " to: " << totalFilesRi[curLang] << " at position " <<  s << endl;
-				cout << average[curLang] << " < " << average[prevLang] << "    averages comparison" << endl;
+				cout << "averages comparison:" << average[curLang] << " < " << average[prevLang] << endl;
 				cout << "context of change: " << contextWithNextChar[s] << endl;
 				langChanges.insert({ s , totalFilesRi[curLang] });
 			}
