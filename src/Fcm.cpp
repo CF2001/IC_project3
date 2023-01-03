@@ -268,8 +268,8 @@ void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 		end1 = clock();
 		time = double(end1 - start1)/CLOCKS_PER_SEC;
 		elapsed += time;
+		cout << "Alphabet Size: " << alphabet.size() << " characters" << endl;
 		cout << "Elapsed Time: " << time << " seconds" << endl;
-
 		cout << "Processed: " << count/time/pow(10,6) << " megabytes per second" << endl;
 
 		fclose(file);
@@ -318,7 +318,7 @@ map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, 
 	start1 = clock();
 	//percorrer todos os contextos com caracteres
 	for (size_t s = 0; s < contextWithNextChar.size(); s++) { // k a size
-		if(verbose) cout << "|" << contextWithNextChar[s] << "|";
+		//if(verbose) cout << "|" << contextWithNextChar[s] << "|";
 		// Percorrer todos os modelos
 		for (size_t m = 0; m < totalModels.size(); m++) {
 

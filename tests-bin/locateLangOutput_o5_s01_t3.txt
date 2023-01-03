@@ -1,9 +1,0 @@
-
-
-creating models...
-
-Locating languages...
-Language at start is ../AllLanguages/bulgarian.txt
-Language changed from: ../AllLanguages/bulgarian.txt to: ../AllLanguages/english.txt at position 1103
-Language changed from: ../AllLanguages/english.txt to: ../AllLanguages/greek.txt at position 4069
-Language changed from: ../AllLanguages/greek.txt to: ../AllLanguages/spanish.txt at position 8198
