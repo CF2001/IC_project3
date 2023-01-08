@@ -23,6 +23,10 @@ algorithm
 -
 math.h
 -
+time.h
+-
+numeric
+-
 Fcm.h
 /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/src/Fcm.h
 
@@ -50,6 +54,8 @@ math.h
 iostream
 -
 string
+-
+fstream
 -
 ../src/Fcm.cpp
 /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/src/Fcm.cpp
