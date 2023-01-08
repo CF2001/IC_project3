@@ -403,7 +403,7 @@ string Fcm::languageName(string languagePath)
 	string langName {};
 	int count {0};
 
-	for (int c = 0; c < languagePath.size()-1; c++)
+	for (size_t c = 0; c < languagePath.size()-1; c++)
 	{
 		if (languagePath[c] == '/')
 		{
