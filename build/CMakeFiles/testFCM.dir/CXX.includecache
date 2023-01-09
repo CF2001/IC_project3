@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/src/Fcm.cpp
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/src/Fcm.cpp
 iostream
 -
 string
@@ -28,9 +28,9 @@ time.h
 numeric
 -
 Fcm.h
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/src/Fcm.h
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/src/Fcm.h
 
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/src/Fcm.h
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/src/Fcm.h
 iostream
 -
 string
@@ -50,7 +50,7 @@ algorithm
 math.h
 -
 
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/tests/testFCM.cpp
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/tests/testFCM.cpp
 iostream
 -
 string
@@ -58,5 +58,5 @@ string
 fstream
 -
 ../src/Fcm.cpp
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/src/Fcm.cpp
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/src/Fcm.cpp
 

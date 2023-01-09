@@ -35,7 +35,7 @@ class Fcm {
 
 	/**
 	*	@brief	set the order of the model
-	*	@param 	k ordem of the model
+	*	@param 	k order of the model
 	*/
 	void setOrder(int k);
 
@@ -84,24 +84,15 @@ class Fcm {
 	*	@brief	Locates the position of different languages in a text file
 	*	@param	totalFilesRi
 	* 	@param	filenameT		text file for analysis
-	* 	@param	sensit
-	* 	@param	verb	
+	* 	@param	sensit			Determines the window size of the averages that will be considered to detect a language.
+	* 	@param	verb			Turns verbose on, the program will display each step of the process and all the context processed.
 	*/
-	map<int, string> locateLang(vector<string> totalFilesRi, string filenameT, int sensit, bool verb);
-
-	/**
-	*	@brief	Gets the number of bits needed to compress a given character
-	*	@param	alphabetSIZE	number of different characters of a language
-	*	@param	context			respective context of the text to be analyzed
-	*	@param	nextchar		next character to the context of the text to analyze
-	*	@param	modelFCM		fcm model of the other text
-	*/
-	double getBitsForChar(int alphabetSIZE, string context, char nextchar, map<string,map<char, int>> modelFCM);
+	map<int, string> locateLang(vector<string> totalFilesRi, string filenameT, size_t sensit, bool verb);
 	
 
 	/**
-	*	@brief	
-	*	@param 	totalFilesRi
+	*	@brief	Returns statistics on model creation processing
+	*	@param 	totalFilesRi	text files for creating the fcm model
 	*/
 	void statisticsModelCreation(vector<string> totalFilesRi);
 

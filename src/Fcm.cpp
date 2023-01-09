@@ -136,7 +136,7 @@ double Fcm::modelEntropy(map<string,map<char, int>> &model)
 			tmp += i.second;
 		// Determine the number of times all context nextchar appear
 		nctxNextchar[m.first] = tmp;
-		// Determine the number of times the context appear
+		// Determine the number of times the all contexts appear
 		nOccurAllctx += tmp;
 	}
 	
@@ -218,27 +218,6 @@ double Fcm::nBitsToCompress(string filenameRi, string filenameT)
 }
 
 
-double Fcm::getBitsForChar(int alphabetSIZE, string context, char nextchar, map<string,map<char, int>> modelFCM) {
-	int ni  = 0;
-	int nctx = 0;
-	if (modelFCM.count(context) > 0) //se encontra o contexto no modelo
-	{
-		//contagem de vezes que apareceu next char, dado que aconteceu o contexto
-		if(modelFCM[context].count(nextchar)) {
-			ni = modelFCM[context][nextchar];
-		}
-		//contagem de vezes que apareceu o contexto
-		map <char, int> occurCtx = modelFCM[context];
-		for (auto i : occurCtx)
-		{
-			nctx += i.second;
-		}
-
-	}
-	//numero de bits para codificar o caractere
-	return -log2(((ni + alpha) / (nctx + (alpha*alphabetSIZE))));
-}
-
 void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 	cout << "\nCreating models statistics (may vary from OS to OS and how busy the system is)"<<endl;
 
@@ -277,7 +256,7 @@ void Fcm::statisticsModelCreation(vector<string> totalFilesRi) {
 	cout << "\nTotal of " << totalFilesRi.size() << " models created in " << elapsed << " seconds." << endl;
 }
 
-map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, int sensitivity, bool verbose)
+map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, size_t sensitivity, bool verbose)
 {
 	//declaração e inicialização
 	vector<map<string,map<char, int>>> totalModels;	// Cada posicao contem M1, M2, ..., Mn
@@ -350,7 +329,7 @@ map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, 
 				averageWindow[m][s%sensitivity] = bits;
 				average[m] = 0;
 				//cout << "s: " << s << endl;
-				for(int i = 0; i<sensitivity; i++) {
+				for(size_t i = 0; i<sensitivity; i++) {
 					average[m] += averageWindow[m][i];
 					//cout << "av wind i: " << i << " val: " << averageWindow[m][i] << endl;
 				}

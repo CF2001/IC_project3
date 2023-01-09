@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/tests-bin/testFCM"
-  "/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/tests-bin/testFCM.pdb"
+  "/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/tests-bin/testFCM"
+  "/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/tests-bin/testFCM.pdb"
   "CMakeFiles/testFCM.dir/testFCM.cpp.o"
 )
 

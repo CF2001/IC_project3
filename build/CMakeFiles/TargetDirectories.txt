@@ -1,6 +1,6 @@
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/build/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/build/CMakeFiles/locateLang.dir
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/build/CMakeFiles/findLang.dir
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/build/CMakeFiles/lang.dir
-/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/build/CMakeFiles/testFCM.dir
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles/rebuild_cache.dir
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles/locateLang.dir
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles/edit_cache.dir
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles/findLang.dir
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles/lang.dir
+/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/CMakeFiles/testFCM.dir
