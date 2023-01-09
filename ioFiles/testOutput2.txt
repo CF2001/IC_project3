@@ -1,0 +1,32 @@
+
+verbose ON
+order: 7
+smoothing: 0.1
+sensitivity window: 3
+
+got files to model: 
+../languages/English/english.txt
+../languages/French/FR.txt
+../languages/Portuguese/portuguese.txt
+file to test:
+../ioFiles/testInput2.txt
+
+creating models...
+created model for ../languages/English/english.txt
+created model for ../languages/French/FR.txt
+created model for ../languages/Portuguese/portuguese.txt
+
+Locating languages...
+
+Language at start is ../languages/Portuguese/portuguese.txt
+
+Language changed from: ../languages/Portuguese/portuguese.txt to: ../languages/French/FR.txt at position 751
+averages comparison:1.10235 < 7.15987
+context of change: Philippe
+
+Language changed from: ../languages/French/FR.txt to: ../languages/English/english.txt at position 1401
+averages comparison:0.128422 < 5.67344
+context of change: e public
+
+done in: 0.009084 seconds 
+average context processing time: 0.00394613 miliseconds

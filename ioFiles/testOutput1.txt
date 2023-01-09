@@ -1,0 +1,138 @@
+
+statistics ON
+verbose ON
+order: 4
+smoothing: 0.1
+sensitivity window: 3
+
+got files to model: 
+"../MoreLanguages/danish.txt"
+"../MoreLanguages/dutch.txt"
+"../MoreLanguages/english.txt"
+"../MoreLanguages/finnish.txt"
+"../MoreLanguages/french.txt"
+"../MoreLanguages/german.txt"
+"../MoreLanguages/greek.txt"
+"../MoreLanguages/italian.txt"
+"../MoreLanguages/portuguese.txt"
+"../MoreLanguages/spanish.txt"
+"../MoreLanguages/swedish.txt"
+file to test:
+../ioFiles/testInput1.txt
+
+Creating models statistics (may vary from OS to OS and how busy the system is)
+
+Processing: 
+	../MoreLanguages/danish.txt
+Size of file: 170884 bytes
+Alphabet Size: 124 characters
+Elapsed Time: 0.102204 seconds
+Processed: 1.67199 megabytes per second
+
+Processing: 
+	../MoreLanguages/dutch.txt
+Size of file: 183992 bytes
+Alphabet Size: 126 characters
+Elapsed Time: 0.06703 seconds
+Processed: 2.74492 megabytes per second
+
+Processing: 
+	../MoreLanguages/english.txt
+Size of file: 178702 bytes
+Alphabet Size: 126 characters
+Elapsed Time: 0.06021 seconds
+Processed: 2.96798 megabytes per second
+
+Processing: 
+	../MoreLanguages/finnish.txt
+Size of file: 178601 bytes
+Alphabet Size: 126 characters
+Elapsed Time: 0.059448 seconds
+Processed: 3.00432 megabytes per second
+
+Processing: 
+	../MoreLanguages/french.txt
+Size of file: 185652 bytes
+Alphabet Size: 132 characters
+Elapsed Time: 0.071401 seconds
+Processed: 2.60013 megabytes per second
+
+Processing: 
+	../MoreLanguages/german.txt
+Size of file: 182230 bytes
+Alphabet Size: 134 characters
+Elapsed Time: 0.066433 seconds
+Processed: 2.74306 megabytes per second
+
+Processing: 
+	../MoreLanguages/greek.txt
+Size of file: 322580 bytes
+Alphabet Size: 144 characters
+Elapsed Time: 0.096995 seconds
+Processed: 3.32574 megabytes per second
+
+Processing: 
+	../MoreLanguages/italian.txt
+Size of file: 181386 bytes
+Alphabet Size: 144 characters
+Elapsed Time: 0.059001 seconds
+Processed: 3.07429 megabytes per second
+
+Processing: 
+	../MoreLanguages/portuguese.txt
+Size of file: 181803 bytes
+Alphabet Size: 144 characters
+Elapsed Time: 0.062529 seconds
+Processed: 2.9075 megabytes per second
+
+Processing: 
+	../MoreLanguages/spanish.txt
+Size of file: 192580 bytes
+Alphabet Size: 144 characters
+Elapsed Time: 0.062107 seconds
+Processed: 3.10078 megabytes per second
+
+Processing: 
+	../MoreLanguages/swedish.txt
+Size of file: 171313 bytes
+Alphabet Size: 144 characters
+Elapsed Time: 0.06209 seconds
+Processed: 2.75911 megabytes per second
+
+Total of 11 models created in 0.769448 seconds.
+
+creating models...
+created model for ../MoreLanguages/danish.txt
+created model for ../MoreLanguages/dutch.txt
+created model for ../MoreLanguages/english.txt
+created model for ../MoreLanguages/finnish.txt
+created model for ../MoreLanguages/french.txt
+created model for ../MoreLanguages/german.txt
+created model for ../MoreLanguages/greek.txt
+created model for ../MoreLanguages/italian.txt
+created model for ../MoreLanguages/portuguese.txt
+created model for ../MoreLanguages/spanish.txt
+created model for ../MoreLanguages/swedish.txt
+
+Locating languages...
+
+Language at start is ../MoreLanguages/danish.txt
+
+Language changed from: ../MoreLanguages/danish.txt to: ../MoreLanguages/swedish.txt at position 65
+averages comparison:0.975854 < 0.980796
+context of change: kning
+
+Language changed from: ../MoreLanguages/swedish.txt to: ../MoreLanguages/danish.txt at position 155
+averages comparison:0.721387 < 7.44698
+context of change: , at 
+
+Language changed from: ../MoreLanguages/danish.txt to: ../MoreLanguages/swedish.txt at position 557
+averages comparison:0.31685 < 1.09851
+context of change:  skal
+
+Language changed from: ../MoreLanguages/swedish.txt to: ../MoreLanguages/dutch.txt at position 5165
+averages comparison:0.0924255 < 4.17143
+context of change:  het 
+
+done in: 0.340206 seconds 
+average context processing time: 0.00578473 miliseconds

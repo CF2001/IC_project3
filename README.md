@@ -33,3 +33,9 @@ make
 ## Testing the code 
 
 After building the code, a program will be put in the <tt>«your-project»/tests-bin</tt> directory.
+
+## locatelang Execution examples:
+
+./locatelang -v ../languages/English/english.txt ../languages/French/FR.txt ../languages/Portuguese/portuguese.txt ../ioFiles/testInput2.txt > ../ioFiles/testOutput2.txt
+
+./locatelang -s 0.1 -w 3 -o 4 -i -v ../MoreLanguages ../ioFiles/testInput1.txt > ../ioFiles/testOutput1.txt

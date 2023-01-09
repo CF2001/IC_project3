@@ -347,13 +347,22 @@ map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, 
 				averageWindow[m][s] = bits;
 			}else{
 				//media - old av bits + new av bits
-				average[m] = average[m] + bits/((float)sensitivity) - averageWindow[m][s%sensitivity]/((float)sensitivity);
 				averageWindow[m][s%sensitivity] = bits;
+				average[m] = 0;
+				//cout << "s: " << s << endl;
+				for(int i = 0; i<sensitivity; i++) {
+					average[m] += averageWindow[m][i];
+					//cout << "av wind i: " << i << " val: " << averageWindow[m][i] << endl;
+				}
+				average[m] = average[m] / (float)sensitivity;
+				//cout << "av: " << average[m] << endl;
+				//average[m] = average[m] + bits/((float)sensitivity) - averageWindow[m][s%sensitivity]/((float)sensitivity);
+				
 			}
 
 
 			//comparação para ter a menor media
-			if(average[m] < curAverage && m != prevLang) {
+			if(average[m] < curAverage){
 				curAverage = average[m];
 				curLang = m;
 			}
@@ -368,7 +377,7 @@ map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, 
 		if(prevLang != curLang){
 			if(prevLang != -1) {
 				cout << "\nLanguage changed from: " << totalFilesRi[prevLang] << " to: " << totalFilesRi[curLang] << " at position " <<  s << endl;
-				cout << "averages comparison:" << average[curLang] << " < " << average[prevLang] << endl;
+				cout << "averages comparison:" << curAverage << " < " << average[prevLang] << endl;
 				cout << "context of change: " << contextWithNextChar[s] << endl;
 				langChanges.insert({ s , totalFilesRi[curLang] });
 			}
