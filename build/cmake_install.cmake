@@ -1,4 +1,4 @@
-# Install script for directory: /home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/tests
+# Install script for directory: /mnt/c/Users/Lenovo/Desktop/IC/IC_project3/tests
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/anaclaudia/Documents/UA/4_Ano/IC/IC_project3/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Users/Lenovo/Desktop/IC/IC_project3/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
