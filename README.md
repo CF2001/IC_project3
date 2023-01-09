@@ -75,7 +75,7 @@ Exemplification:  ./findLang ../languages/Bulgarian/BULG2.txt ../languages/Danis
 
 ```
 
-### To test exercise 4
+### To test exercise 4 - applicaion locateLang
 
 ```
 ./locateLang [options] <modelFile1> ... <modelFileN> <FileToTest>
