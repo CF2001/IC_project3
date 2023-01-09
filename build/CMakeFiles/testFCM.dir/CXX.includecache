@@ -55,6 +55,8 @@ iostream
 -
 string
 -
+fstream
+-
 ../src/Fcm.cpp
 /mnt/c/Users/Lenovo/Desktop/IC/IC_project3/src/Fcm.cpp
 

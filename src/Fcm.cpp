@@ -21,6 +21,15 @@ Fcm::Fcm(int k, double alpha)
 	this->alpha = alpha; 
 }
 
+void Fcm::createAlphabet(vector<char> info)
+{
+	for (char c : info)
+	{
+        if (!(c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v')) //if not blank space
+			alphabet.insert(c);	// sem repeticoes
+	}
+}
+
 vector<char> Fcm::getCharsFromText(string filename)
 {
 	ifstream file;		// Read from a file 
@@ -69,15 +78,6 @@ vector<string> Fcm::getContextWithNextChar(vector<char> info)
 		contextNextChar = "";
 	}
 	return contextWithNextChar;
-}
-
-void Fcm::createAlphabet(vector<char> info)
-{
-	for (char c : info)
-	{
-        if (!(c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v')) //if not blank space
-			alphabet.insert(c);	// sem repeticoes
-	}
 }
 
 
@@ -217,7 +217,7 @@ double Fcm::nBitsToCompress(string filenameRi, string filenameT)
 	return nbitsToCompress;
 }
 
-//return estimated bits for given char after given context in the given model
+
 double Fcm::getBitsForChar(int alphabetSIZE, string context, char nextchar, map<string,map<char, int>> modelFCM) {
 	int ni  = 0;
 	int nctx = 0;
@@ -396,9 +396,41 @@ map<int, string> Fcm::locateLang(vector<string> totalFilesRi, string filenameT, 
 	return langChanges;
 }
 
-void Fcm::saveModelToFile(map<string,map<char, int>> &model, string filename)
+
+int Fcm::getSizeFile(string filename)
 {
-	ofstream ofs { filename };
+	ifstream in_file(filename, ios::binary);
+   	in_file.seekg(0, ios::end);
+   	int file_size = in_file.tellg();
+
+  	return file_size;
+}
+
+
+string Fcm::languageName(string languagePath)
+{
+	string langName {};
+	int count {0};
+
+	for (size_t c = 0; c < languagePath.size()-1; c++)
+	{
+		if (languagePath[c] == '/')
+		{
+			count++;
+		}
+
+		if (count == 2)
+		{
+			langName += languagePath[c];
+		}
+	}
+	return langName.substr(1, langName.size());
+}
+
+void Fcm::saveModelToFile(map<string,map<char, int>> &model, string inFilename, string outFilename)
+{
+	ofstream ofs { outFilename };
+	ofs << "Modelo criado para o ficheiro de texto: " << inFilename << "\n" << endl;
 
 	for (auto [ctx, counter]  : model)
 	{

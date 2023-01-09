@@ -3,6 +3,7 @@
 
 #include "../src/Fcm.cpp"
 
+
 int main(int argc, char *argv[])
 {
 	if (argc != 5)
@@ -20,10 +21,13 @@ int main(int argc, char *argv[])
 	Fcm f {order, smoothing}; 
 	double bitEstimationComp {0};
 
-	// Estimar o número bits para a compressao do testFile em funcao do modelo modelFile
+	// Tamanho em bits do ficheiro original
+	cout<<"Size of the original file is " << f.getSizeFile(testFile)*8 << " bits" << endl;
+	
+	// Estimar o número bits para a compressao do ficheiro original (testFile)
+	//  em função do modelo criado pelo ficheiro modelFile
 	bitEstimationComp = f.nBitsToCompress(modelFile, testFile);
 	cout << "Required bits for compression: " << bitEstimationComp << endl; 
-	//f.printModel(model);
 	 
 	return 0; 
 }
