@@ -67,11 +67,7 @@ Exemplification: ./lang ../languages/Portuguese/PT1.utf8 ../languages/German/ger
 <modelFile> 			=> text file to create the example model
 <languageToDiscover>	=> language text to discover
 
-Exemplification:  ./findLang ../languages/Bulgarian/BULG2.txt ../languages/Danish/Danish1.utf8 ../languages/English/english1.txt 
-				../languages/Estonian/estonian1.txt ../languages/Finnish/finnish1.txt ../languages/French/FR1.txt ../languages/German/german1.txt 
-				../languages/Greek/greek1.txt ../languages/Hungarian/HG1.txt ../languages/Italian/italian2.txt ../languages/Latvian/latvian1.utf8 
-				../languages/Polish/polish2.txt ../languages/Portuguese/lusiadasCanto1.txt ../languages/Romanian/romanian1.utf8 
-				../languages/Slovak/slovak1.utf8 ../languages/Spanish/spanish1.txt ../languages/French/FR2.txt
+Exemplification:  ./findLang ../languages/Bulgarian/BULG2.txt ../languages/Danish/Danish1.utf8 ../languages/English/english1.txt ../languages/Estonian/estonian1.txt ../languages/Finnish/finnish1.txt ../languages/French/FR1.txt ../languages/German/german1.txt ../languages/Greek/greek1.txt ../languages/Hungarian/HG1.txt ../languages/Italian/italian2.txt ../languages/Latvian/latvian1.utf8 ../languages/Polish/polish2.txt ../languages/Portuguese/lusiadasCanto1.txt ../languages/Romanian/romanian1.utf8 ../languages/Slovak/slovak1.utf8 ../languages/Spanish/spanish1.txt ../languages/French/FR2.txt
 
 ```
 
