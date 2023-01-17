@@ -94,6 +94,9 @@ Exemplification 3 :
 ./locateLang -s 0.1 -w 3 -o 4 -i -v ../MoreLanguages ../ioFiles/testInput1.txt > ../ioFiles/testOutput1.txt
 ```
 
+*** 
+### Grade: 16,5
+
 
 
 
