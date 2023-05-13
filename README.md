@@ -1,9 +1,6 @@
 # Project 3 - Information and Coding 
 
-*******
-*******
-
-##  Preparing the compilation environment
+###  Preparing the compilation environment
 
 In a terminal, enter the base directory of your project, create the **build** directory,
 and use _cmake_ to prepare _make_
@@ -18,7 +15,7 @@ cmake ../tests/
 
 ****** 
 
-## Compiling the code
+### Compiling the code
 
 In a terminal, enter the **build** directory of your project and run _make_ 
 
@@ -30,11 +27,11 @@ make
 
 ****** 
 
-## Testing the code 
+### Testing the code 
 
 After building the code, a program will be put in the <tt>«your-project»/tests-bin</tt> directory.
 
-### To test exercise 1	- program fcm
+#### To test exercise 1	- program fcm
 
 ```
 ./testFCM <inputFile> <outputFile> <order>
@@ -46,7 +43,7 @@ After building the code, a program will be put in the <tt>«your-project»/tests
 Exemplification: ./testFCM ../languages/Portuguese/fernadoPessoa.txt model.txt 4
 ```
 
-### To test exercise 2	- program lang
+#### To test exercise 2	- program lang
 
 ```
 ./lang <modelFile> <testFile> <order> <smoothing>
@@ -59,7 +56,7 @@ Exemplification: ./testFCM ../languages/Portuguese/fernadoPessoa.txt model.txt 4
 Exemplification: ./lang ../languages/Portuguese/PT1.utf8 ../languages/German/german1.txt 4 0.1
 ```
 
-### To test exercise 3	- program findlang
+#### To test exercise 3	- program findlang
 
 ```
 ./findLang <modelFile1> <...> <modelFile10> <languageToDiscover>
@@ -71,7 +68,7 @@ Exemplification:  ./findLang ../languages/Bulgarian/BULG2.txt ../languages/Danis
 
 ```
 
-### To test exercise 4 - application locateLang
+#### To test exercise 4 - application locateLang
 
 ```
 ./locateLang [options] <modelFile1> ... <modelFileN> <FileToTest>
@@ -95,7 +92,10 @@ Exemplification 3 :
 ```
 
 *** 
-### Grade: 16,5
+
+Projects developed with [Júlia Abrantes](https://github.com/JuliaAbrantes) and [Sara Costa](https://github.com/saracarolina80).
+
+#### Grade: 16,5
 
 
 
