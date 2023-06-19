@@ -95,7 +95,7 @@ Exemplification 3 :
 
 Projects developed with [Júlia Abrantes](https://github.com/JuliaAbrantes) and [Sara Costa](https://github.com/saracarolina80).
 
-#### Grade: 16,5
+#### Grade: 16,5/20
 
 
 
